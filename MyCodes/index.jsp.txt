@@ -1,0 +1,46 @@
+<%@page import="java.sql.ResultSetMetaData"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Validation</title>
+</head>
+<body>
+ <%
+         String uname = request.getParameter("uname");
+         String password = request.getParameter("pass");
+        // session.setAttribute("username", uname);
+         
+         
+        
+         try {
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/grizzly", "root", "root");
+                String s1 = "select * from login where username='"+uname+"' AND password='"+password+"'";
+                PreparedStatement ps = conn.prepareStatement(s1);
+                ResultSet rs = ps.executeQuery(s1);
+                if(rs.next())
+                {
+                	response.sendRedirect("ListProduct.jsp?username="+uname+"");
+                }
+                else
+                {
+                	out.println("Issue in viewing the product list..please check!");
+                }
+               
+                
+         }
+         catch(Exception e)
+         {
+        	 out.println(e.getMessage());
+         }
+ 
+ %>
+</body>
+</html>
